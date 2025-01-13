@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login & Signup</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://kit.fontawesome.com/0dcd3ed8d6.js" crossorigin="anonymous"></script>
+</head>
+<body>
+    <div class="main-container">
+        <h1 class="page-heading">COP 4331 Group 1</h1>
+        <div class="form-container">
+            <div class="form login-box active">
+                <h2>Login</h2>
+                <form id="login-form">
+                    <div class="input-container">
+                        <i class="fa-solid fa-user"></i>
+                        <input type="text" placeholder="Username" required>
+                    </div>
+                    <div class="input-container">
+                        <i class="fa-solid fa-lock"></i>
+                        <input type="password" placeholder="Password" required>
+                    </div>
+                    <button type="submit">Login</button>
+                </form>
+                <p>Don't have an account? <button class="toggle-btn" onclick="toggleForm('signup')">Sign Up</button></p>
+            </div>
+            <div class="form signup-box">
+                <h2>Sign Up</h2>
+                <form id="signup-form">
+                    <div class="input-container">
+                        <i class="fa-solid fa-user"></i>
+                        <input type="text" placeholder="First Name" required>
+                    </div>
+                    <div class="input-container">
+                        <i class="fa-solid fa-user"></i>
+                        <input type="text" placeholder="Last Name" required>
+                    </div>
+                    <div class="input-container">
+                        <i class="fa-solid fa-user"></i>
+                        <input type="text" placeholder="Username" required>
+                    </div>
+                    <div class="input-container">
+                        <i class="fa-solid fa-lock"></i>
+                        <input type="password" placeholder="Password" required>
+                    </div>
+                    <button type="submit">Sign Up</button>
+                </form>
+                <p>Already have an account? <button class="toggle-btn" onclick="toggleForm('login')">Login</button></p>
+            </div>
+        </div>
+    </div>
+    <script src="code.js"></script>
+</body>
+</html>

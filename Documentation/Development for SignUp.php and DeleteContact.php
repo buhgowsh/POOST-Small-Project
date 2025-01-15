@@ -1,3 +1,9 @@
+When first taking a look at the php I was very confused on certain aspects of
+how things were done, mainly hwat the deal with the quotations was. However,
+after taking some time to look up information about making a website with html and php
+I realized that the things in quotations either refered to the columns in
+the SQL Database or things in html code.
+
 when making the DeleteContact.php file, I mainly followed Gabriela's working files and looked
 at the delete syntax for mySQL on w3schools.com.
 	I did not find it to be very difficult, but there was an issue that was solved by copying and pasting

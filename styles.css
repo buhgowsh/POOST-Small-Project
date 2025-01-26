@@ -1,3 +1,4 @@
+/* General Styling */
 * {
     margin: 0;
     padding: 0;
@@ -34,6 +35,11 @@ body {
     color: #333;
 }
 
+.hidden {
+    display: none;
+}
+
+/* Forms Styling */
 .form-container {
     width: 400px;
     background: linear-gradient(#ffffff34, #ffffff27);
@@ -116,4 +122,124 @@ p {
     width: 100%;
     padding: 10px;
     font-size: 16px;
+}
+
+.password-requirements small {
+    display: block;
+    margin-top: 5px;
+    color: red;
+    font-size: 0.9rem;
+}
+
+/* Dashboard Styling */
+.dashboard-container {
+    width: 105%;
+    max-width: 1500px;
+    margin: auto;
+    text-align: center;
+    background: #ffffffb0;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.dashboard-heading {
+    font-size: 2rem;
+    margin-bottom: 20px;
+}
+
+.search-bar {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.search-bar input {
+    width: 60%;
+    padding: 10px;
+    font-size: 1rem;
+    border: 1px solid #ddd;
+    border-radius: 5px 0 0 5px;
+}
+
+.search-bar button {
+    padding: 10px 20px;
+    font-size: 1rem;
+    background: #007bff;
+    color: white;
+    border: none;
+    border-radius: 0 5px 5px 0;
+    cursor: pointer;
+}
+
+.search-bar button:hover {
+    background: #0056b3;
+}
+
+.contact-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+
+.contact-table th,
+.contact-table td {
+    padding: 10px;
+    text-align: left;
+    border: 1px solid #ddd;
+}
+
+.contact-table th {
+    background: #f4f4f4;
+}
+
+.contact-table button {
+    padding: 5px 10px;
+    margin: 0 2px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    border: none;
+    border-radius: 5px;
+}
+
+.contact-table button:hover {
+    opacity: 0.9;
+}
+
+.add-contact button {
+    padding: 10px 20px;
+    font-size: 1rem;
+    background: #28a745;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.add-contact button:hover {
+    background: #218838;
+}
+
+.logout-container {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 20px;
+}
+
+#logout-button {
+    position: absolute; /* Position relative to the entire webpage */
+    top: 20px; /* Distance from the top of the screen */
+    right: 20px; /* Distance from the right edge of the screen */
+    padding: 10px 20px;
+    font-size: 1rem;
+    background: #dc3545; /* Red for logout */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    z-index: 1000; /* Ensures it stays on top of other elements */
+}
+
+#logout-button:hover {
+    background: #c82333; /* Darker red on hover */
 }

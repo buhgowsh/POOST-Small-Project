@@ -4,13 +4,19 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login & Signup</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="css/styles.css">
     <script src="https://kit.fontawesome.com/0dcd3ed8d6.js" crossorigin="anonymous"></script>
 </head>
 <body>
     <div class="main-container">
-        <!-- Login and Signup Forms -->
-        <h1 class="page-heading">COP 4331 Group 1</h1>
+        <!-- Page Heading -->
+        <h1 class="page-heading">
+            <a href="https://github.com/buhgowsh/POOST-Small-Project" target="_blank" rel="noopener noreferrer">
+                COP 4331 Group 1
+            </a>
+        </h1>
+
+        <!-- Form Container -->
         <div class="form-container">
             <!-- Login Form -->
             <div class="form login-box active">
@@ -18,11 +24,11 @@
                 <form id="login-form">
                     <div class="input-container">
                         <i class="fa-solid fa-user"></i>
-                        <input type="text" placeholder="Username" required>
+                        <input type="text" id="login-username" placeholder="Username" required>
                     </div>
                     <div class="input-container">
                         <i class="fa-solid fa-lock"></i>
-                        <input type="password" placeholder="Password" required>
+                        <input type="password" id="login-password" placeholder="Password" required>
                     </div>
                     <button type="submit">Login</button>
                 </form>
@@ -35,23 +41,42 @@
                 <form id="signup-form">
                     <div class="input-container">
                         <i class="fa-solid fa-user"></i>
-                        <input type="text" placeholder="First Name" required>
+                        <input type="text" id="signup-firstname" placeholder="First Name" required>
                     </div>
                     <div class="input-container">
                         <i class="fa-solid fa-user"></i>
-                        <input type="text" placeholder="Last Name" required>
+                        <input type="text" id="signup-lastname" placeholder="Last Name" required>
                     </div>
-                    <div class="input-container">
-                        <i class="fa-solid fa-user"></i>
-                        <input type="text" placeholder="Username" required>
-                    </div>
-                    <div class="input-container">
-                        <i class="fa-solid fa-lock"></i>
-                        <input id="signup-password" type="password" placeholder="Password" required>
-                    </div>
-                    <div class="password-requirements">
-                        <small>Password must be 8-12 characters long, contain at least one capital letter, one number, and one special character.</small>
-                    </div>
+            <!-- Username Input Field -->
+            <div class="input-container">
+                <i class="fa-solid fa-user"></i>
+                <input type="text" id="signup-username" placeholder="Username (3-18 characters)" required>
+                <button type="button" class="tooltip-btn" id="username-tooltip-btn"></button>
+                <div class="tooltip" id="username-tooltip">
+                    Username must:
+                    <ul>
+                        <li>Be 3-18 characters long</li>
+                        <li>Contain at least one letter</li>
+                        <li>Include only letters and numbers</li>
+                    </ul>
+                </div>
+            </div>
+            <!-- Password Input Field -->
+            <div class="input-container">
+                <i class="fa-solid fa-lock"></i>
+                <input id="signup-password" type="password" placeholder="Password (8-32 characters)" required>
+                <button type="button" class="tooltip-btn" id="password-tooltip-btn"></button>
+                <div class="tooltip" id="password-tooltip">
+                    Password must:
+                    <ul>
+                        <li>Be 8-32 characters long</li>
+                        <li>Contain at least one uppercase letter</li>
+                        <li>Contain at least one number</li>
+                        <li>Contain at least one special character (@$!%*?&)</li>
+                    </ul>
+                </div>
+            </div>
+
                     <button type="submit">Sign Up</button>
                 </form>
                 <p>Already have an account? <button class="toggle-btn" onclick="toggleForm('login')">Login</button></p>
@@ -62,10 +87,12 @@
         <div class="dashboard-container hidden">
             <button id="logout-button">Logout</button>
             <h1 class="dashboard-heading">Welcome to Your Dashboard</h1>
+
             <div class="search-bar">
                 <input type="text" placeholder="Search Contacts..." id="search-input">
                 <button>Search</button>
             </div>
+
             <table class="contact-table">
                 <thead>
                     <tr>
@@ -99,11 +126,18 @@
                     </tr>
                 </tbody>
             </table>
+
             <div class="add-contact">
                 <button>Add New Contact</button>
             </div>
-        </div>        
+        </div>
+        
+        <!-- Debug Button for Dashboard -->
+        <div style="text-align: center; margin-top: 20px;">
+            <button id="debug-dashboard-button" class="debug-btn">Go to Dashboard (Temporary)</button>
+        </div>
     </div>
-    <script src="code.js"></script>
+
+    <script src="js/code.js"></script>
 </body>
 </html>

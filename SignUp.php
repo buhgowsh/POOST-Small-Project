@@ -43,5 +43,5 @@
                 $retValue = '{"error":"' . $err . '"}';
                 sendResultInfoAsJson( $retValue );
         }
-
+?>
 

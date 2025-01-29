@@ -31,8 +31,8 @@ body {
 
 .page-heading {
     text-align: center;
-    font-size: 2rem;
-    color: #333;
+    font-size: 3rem;
+    color: #000000;
 }
 
 .page-heading a {
@@ -51,7 +51,7 @@ body {
 /* Forms Styling */
 .form-container {
     width: 400px;
-    background: linear-gradient(#ffffff34, #ffffff27);
+    background: linear-gradient(#8b8b8b00, #171717);
     border-radius: 10px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
     overflow: hidden;

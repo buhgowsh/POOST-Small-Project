@@ -25,6 +25,84 @@ document.getElementById('debug-dashboard-button')?.addEventListener('click', fun
     document.querySelector('.dashboard-container').classList.remove('hidden');
 });
 
+// ** Login API Integration **
+document.getElementById('login-form').addEventListener('submit', async function (e) {
+    e.preventDefault();
+
+    const login = document.getElementById("login-username").value;
+    const password = document.getElementById("login-password").value;
+
+    let payload = { Login: login, Password: password };
+    let jsonPayload = JSON.stringify(payload);
+
+    let url = urlBase + '/Login.' + extension;
+
+    try {
+        const response = await fetch(url, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: jsonPayload,
+        });
+
+        const result = await response.json();
+
+        if (response.ok && result.ID > 0) {
+            // Save user details in localStorage
+            localStorage.setItem('userId', result.ID);
+            localStorage.setItem('firstName', result.FirstName);
+            localStorage.setItem('lastName', result.LastName);
+
+            alert(`Welcome back, ${result.FirstName} ${result.LastName}!`);
+            
+            document.querySelector('.form-container').classList.add('hidden');
+            document.querySelector('.dashboard-container').classList.remove('hidden');
+
+            loadContacts(); // Load user's contacts into the dashboard
+        } else {
+            alert(result.error || "Invalid login credentials. Please try again.");
+        }
+    } catch (error) {
+        console.error("Error during login:", error);
+        alert("An error occurred while logging in. Please try again later.");
+    }
+});
+
+// ** Signup API Integration **
+document.getElementById('signup-form').addEventListener('submit', async function (e) {
+    e.preventDefault();
+
+    const firstName = document.getElementById("signup-firstname").value;
+    const lastName = document.getElementById("signup-lastname").value;
+    const login = document.getElementById("signup-username").value;
+    const password = document.getElementById("signup-password").value;
+
+    let payload = { FirstName: firstName, LastName: lastName, Login: login, Password: password };
+    let jsonPayload = JSON.stringify(payload);
+
+    let url = urlBase + '/SignUp.' + extension;
+
+    try {
+        const response = await fetch(url, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: jsonPayload,
+        });
+
+        const result = await response.json();
+
+        if (response.ok && !result.error) {
+            alert("Signup successful! Please log in.");
+            toggleForm('login');
+        } else {
+            alert(result.error || "Signup failed. Please try again.");
+        }
+    } catch (error) {
+        console.error("Error during signup:", error);
+        alert("An error occurred while signing up. Please try again later.");
+    }
+});
+
+
 // Save Cookie
 function saveCookie() {
     let minutes = 20;
@@ -33,7 +111,7 @@ function saveCookie() {
     document.cookie = `firstName=${firstName},lastName=${lastName},userId=${userId};expires=${date.toGMTString()}`;
 }
 
-// Logout Functionality
+// ** Logout Functionality **
 document.getElementById("logout-button").addEventListener("click", function () {
     console.log("Logging out...");
 

@@ -305,3 +305,53 @@ document.getElementById("search-input").addEventListener("input", function () {
     }
 });
 document.querySelector(".add-contact button").addEventListener("click", addContact);
+
+
+// Toggle tooltip visibility
+function toggleTooltip(tooltipId) {
+    const tooltip = document.getElementById(tooltipId);
+
+    if (!tooltip) return; // Ensure tooltip exists
+
+    // Close all other tooltips
+    document.querySelectorAll('.tooltip').forEach((tip) => {
+        if (tip.id !== tooltipId) {
+            tip.classList.remove('active');
+        }
+    });
+
+    // Toggle the selected tooltip
+    tooltip.classList.toggle('active');
+}
+
+// Ensure tooltip buttons exist before adding event listeners
+document.addEventListener("DOMContentLoaded", function () {
+    const usernameTooltipBtn = document.getElementById("username-tooltip-btn");
+    const passwordTooltipBtn = document.getElementById("password-tooltip-btn");
+
+    if (usernameTooltipBtn) {
+        usernameTooltipBtn.addEventListener("click", function (e) {
+            e.preventDefault();
+            toggleTooltip("username-tooltip");
+        });
+    }
+
+    if (passwordTooltipBtn) {
+        passwordTooltipBtn.addEventListener("click", function (e) {
+            e.preventDefault();
+            toggleTooltip("password-tooltip");
+        });
+    }
+
+    // Close tooltips when clicking outside
+    document.addEventListener("click", function (e) {
+        const isTooltipButton = e.target.matches(".tooltip-btn");
+        const isTooltip = e.target.closest(".tooltip");
+
+        if (!isTooltipButton && !isTooltip) {
+            document.querySelectorAll(".tooltip").forEach((tooltip) => {
+                tooltip.classList.remove("active");
+            });
+        }
+    });
+});

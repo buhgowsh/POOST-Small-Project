@@ -1,11 +1,17 @@
+/********************
+  GLOBAL SETTINGS
+*********************/
 const urlBase = 'http://COP4331-1.online/LAMPAPI';
 const extension = 'php';
 
+// If the user is already logged in, we get their info from localStorage:
 let userId = localStorage.getItem('userId') || 0;
 let firstName = localStorage.getItem('firstName') || "";
 let lastName = localStorage.getItem('lastName') || "";
 
-// Toggle between Login and Signup forms
+/***************************************************
+   TOGGLE BETWEEN LOGIN AND SIGNUP FORMS
+****************************************************/
 function toggleForm(formType) {
     const loginBox = document.querySelector('.login-box');
     const signupBox = document.querySelector('.signup-box');
@@ -19,13 +25,18 @@ function toggleForm(formType) {
     }
 }
 
-// REMOVE LATER: Debug Dashboard Button Functionality
+/***************************************************
+   DEBUG BUTTON TO FORCE DASHBOARD (REMOVE LATER)
+****************************************************/
 document.getElementById('debug-dashboard-button')?.addEventListener('click', function () {
     document.querySelector('.form-container').classList.add('hidden');
     document.querySelector('.dashboard-container').classList.remove('hidden');
+    loadContacts();
 });
 
-// ** Login API Integration **
+/***************************************************
+   LOGIN API
+****************************************************/
 document.getElementById('login-form').addEventListener('submit', async function (e) {
     e.preventDefault();
 
@@ -35,29 +46,34 @@ document.getElementById('login-form').addEventListener('submit', async function 
     let payload = { Login: login, Password: password };
     let jsonPayload = JSON.stringify(payload);
 
-    let url = urlBase + '/Login.' + extension;
+    let url = `${urlBase}/Login.${extension}`;
 
     try {
         const response = await fetch(url, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: jsonPayload,
+            body: jsonPayload
         });
 
         const result = await response.json();
-
         if (response.ok && result.ID > 0) {
-            // Save user details in localStorage
             localStorage.setItem('userId', result.ID);
             localStorage.setItem('firstName', result.FirstName);
             localStorage.setItem('lastName', result.LastName);
 
+            // Update global variables
+            userId = result.ID;
+            firstName = result.FirstName;
+            lastName = result.LastName;
+
             alert(`Welcome back, ${result.FirstName} ${result.LastName}!`);
-            
+
+            // Hide login/signup, show dashboard
             document.querySelector('.form-container').classList.add('hidden');
             document.querySelector('.dashboard-container').classList.remove('hidden');
 
-            loadContacts(); // Load user's contacts into the dashboard
+            // Load contacts for the user
+            setTimeout(loadContacts, 500);
         } else {
             alert(result.error || "Invalid login credentials. Please try again.");
         }
@@ -67,7 +83,9 @@ document.getElementById('login-form').addEventListener('submit', async function 
     }
 });
 
-// ** Signup API Integration **
+/***************************************************
+   SIGNUP API
+****************************************************/
 document.getElementById('signup-form').addEventListener('submit', async function (e) {
     e.preventDefault();
 
@@ -76,20 +94,24 @@ document.getElementById('signup-form').addEventListener('submit', async function
     const login = document.getElementById("signup-username").value;
     const password = document.getElementById("signup-password").value;
 
-    let payload = { FirstName: firstName, LastName: lastName, Login: login, Password: password };
+    let payload = {
+        FirstName: firstName,
+        LastName: lastName,
+        Login: login,
+        Password: password
+    };
     let jsonPayload = JSON.stringify(payload);
 
-    let url = urlBase + '/SignUp.' + extension;
+    let url = `${urlBase}/SignUp.${extension}`;
 
     try {
         const response = await fetch(url, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: jsonPayload,
+            body: jsonPayload
         });
 
         const result = await response.json();
-
         if (response.ok && !result.error) {
             alert("Signup successful! Please log in.");
             toggleForm('login');
@@ -102,56 +124,56 @@ document.getElementById('signup-form').addEventListener('submit', async function
     }
 });
 
-
-// Save Cookie
-function saveCookie() {
-    let minutes = 20;
-    let date = new Date();
-    date.setTime(date.getTime() + minutes * 60 * 1000);
-    document.cookie = `firstName=${firstName},lastName=${lastName},userId=${userId};expires=${date.toGMTString()}`;
-}
-
-// ** Logout Functionality **
+/***************************************************
+   LOGOUT
+****************************************************/
 document.getElementById("logout-button").addEventListener("click", function () {
     console.log("Logging out...");
 
-    // Clear stored user session
+    // Clear localStorage
     localStorage.removeItem("userId");
     localStorage.removeItem("firstName");
     localStorage.removeItem("lastName");
 
-    // Reset UI - Hide Dashboard, Show Login Form
+    // Hide dashboard, show login form
     document.querySelector(".dashboard-container").classList.add("hidden");
     document.querySelector(".form-container").classList.remove("hidden");
 
-    // Redirect to login
-    window.location.reload(); 
+    // Reload to reset
+    window.location.reload();
 });
 
-// ** Add Contact Functionality **
+/***************************************************
+   ADD CONTACT
+****************************************************/
 async function addContact() {
-    const firstName = document.getElementById("contact-firstname").value;
-    const lastName = document.getElementById("contact-lastname").value;
-    const phone = document.getElementById("contact-phone").value;
-    const email = document.getElementById("contact-email").value;
+    const fn = document.getElementById("contact-firstname")?.value || "";
+    const ln = document.getElementById("contact-lastname")?.value || "";
+    const ph = document.getElementById("contact-phone")?.value || "";
+    const em = document.getElementById("contact-email")?.value || "";
 
-    if (!firstName || !lastName || !phone || !email) {
+    if (!fn || !ln || !ph || !em) {
         alert("All fields are required to add a contact.");
         return;
     }
 
-    let payload = { UserID: userId, FirstName: firstName, LastName: lastName, Phone: phone, Email: email };
-    let jsonPayload = JSON.stringify(payload);
+    let payload = {
+        UserID: userId,     // Must be capital "UserID" to match AddContact.php
+        FirstName: fn,
+        LastName: ln,
+        Phone: ph,
+        Email: em
+    };
 
-    let url = urlBase + '/AddContact.' + extension;
+    let jsonPayload = JSON.stringify(payload);
+    let url = `${urlBase}/AddContact.${extension}`;
 
     try {
         const response = await fetch(url, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: jsonPayload,
+            body: jsonPayload
         });
-
         const result = await response.json();
 
         if (response.ok && !result.error) {
@@ -166,28 +188,35 @@ async function addContact() {
     }
 }
 
-// ** Search Contact Functionality **
+/***************************************************
+   SEARCH CONTACTS
+****************************************************/
 async function searchContacts() {
     const searchInput = document.getElementById("search-input").value.trim();
 
-    let payload = { UserID: userId, searchInput: searchInput };
-    let jsonPayload = JSON.stringify(payload);
+    let payload = {
+        UserID: userId,    // capital "UserID" for SearchContacts.php
+        searchInput: searchInput
+    };
 
-    let url = urlBase + '/SearchContacts.' + extension;
+    let jsonPayload = JSON.stringify(payload);
+    let url = `${urlBase}/SearchContacts.${extension}`;
 
     try {
         const response = await fetch(url, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: jsonPayload,
+            body: jsonPayload
         });
 
         const result = await response.json();
+        console.log("Search API Response:", result); // debugging
 
         if (response.ok && result.results) {
             displayContacts(result.results);
         } else {
-            displayContacts([]); // Show no contacts found
+            // If there's an error or no results, show empty
+            displayContacts([]);
         }
     } catch (error) {
         console.error("Error searching contacts:", error);
@@ -195,28 +224,32 @@ async function searchContacts() {
     }
 }
 
-// ** Delete Contact Functionality **
-async function deleteContact(contactId) {
-    let confirmDelete = confirm("Are you sure you want to delete this contact?");
+/***************************************************
+   DELETE CONTACT
+   (DeleteContact.php expects "FirstName")
+****************************************************/
+async function deleteContact(firstName) {
+    let confirmDelete = confirm("Are you sure you want to delete all contacts with First Name = " + firstName + "?");
     if (!confirmDelete) return;
 
-    let payload = { contactId: contactId };
+    let payload = {
+        FirstName: firstName // Must be capital "FirstName" to match DeleteContact.php
+    };
     let jsonPayload = JSON.stringify(payload);
 
-    let url = urlBase + '/DeleteContact.' + extension;
+    let url = `${urlBase}/DeleteContact.${extension}`;
 
     try {
         const response = await fetch(url, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: jsonPayload,
+            body: jsonPayload
         });
-
         const result = await response.json();
 
         if (response.ok && !result.error) {
-            alert("Contact deleted successfully!");
-            loadContacts(); // Refresh contacts
+            alert(`Contact(s) with first name "${firstName}" deleted successfully!`);
+            loadContacts();
         } else {
             alert(result.error || "Failed to delete contact.");
         }
@@ -226,35 +259,51 @@ async function deleteContact(contactId) {
     }
 }
 
-// ** Edit Contact Functionality **
-async function editContact(contactId) {
-    const firstName = prompt("Enter new first name:");
-    const lastName = prompt("Enter new last name:");
-    const phone = prompt("Enter new phone number:");
-    const email = prompt("Enter new email:");
+/***************************************************
+   EDIT CONTACT
+   (EditContact.php expects "UserID" and "ContactID")
+****************************************************/
+async function editContact(contactID, oldFirst, oldLast, oldPhone, oldEmail) {
+    const newFirst = prompt("Enter new first name:", oldFirst);
+    if (newFirst === null) return;
 
-    if (!firstName || !lastName || !phone || !email) {
+    const newLast = prompt("Enter new last name:", oldLast);
+    if (newLast === null) return;
+
+    const newPhone = prompt("Enter new phone number:", oldPhone);
+    if (newPhone === null) return;
+
+    const newEmail = prompt("Enter new email:", oldEmail);
+    if (newEmail === null) return;
+
+    if (!newFirst || !newLast || !newPhone || !newEmail) {
         alert("All fields are required to edit a contact.");
         return;
     }
 
-    let payload = { userId: userId, contactId: contactId, FirstName: firstName, LastName: lastName, Phone: phone, Email: email };
-    let jsonPayload = JSON.stringify(payload);
+    let payload = {
+        UserID: userId,         // Must match $inData["UserID"] in EditContact.php
+        ContactID: contactID,    // Must match $inData["ContactID"] in EditContact.php
+        FirstName: newFirst,
+        LastName: newLast,
+        Phone: newPhone,
+        Email: newEmail
+    };
 
-    let url = urlBase + '/EditContact.' + extension;
+    let jsonPayload = JSON.stringify(payload);
+    let url = `${urlBase}/EditContact.${extension}`;
 
     try {
         const response = await fetch(url, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: jsonPayload,
+            body: jsonPayload
         });
-
         const result = await response.json();
 
         if (response.ok && !result.error) {
             alert("Contact updated successfully!");
-            loadContacts(); // Refresh contacts
+            loadContacts(); // Refresh
         } else {
             alert(result.error || "Failed to update contact.");
         }
@@ -264,7 +313,9 @@ async function editContact(contactId) {
     }
 }
 
-// ** Display Contacts in Table **
+/***************************************************
+   DISPLAY CONTACTS (Fill the table)
+****************************************************/
 function displayContacts(contacts) {
     const tableBody = document.querySelector('.contact-table tbody');
     tableBody.innerHTML = "";
@@ -274,7 +325,9 @@ function displayContacts(contacts) {
         return;
     }
 
+    // For each contact, create a table row
     contacts.forEach((contact) => {
+        // We'll pass the necessary data to editContact
         const row = `
             <tr>
                 <td>${contact.FirstName}</td>
@@ -282,8 +335,20 @@ function displayContacts(contacts) {
                 <td>${contact.Phone}</td>
                 <td>${contact.Email}</td>
                 <td>
-                    <button onclick="editContact(${contact.ContactID})"><i class="fa-solid fa-pencil"></i></button>
-                    <button onclick="deleteContact(${contact.ContactID})"><i class="fa-solid fa-trash"></i></button>
+                    <!-- Pass ID + old field values to editContact -->
+                    <button onclick="editContact(
+                        ${contact.ContactID}, 
+                        '${contact.FirstName}', 
+                        '${contact.LastName}', 
+                        '${contact.Phone}', 
+                        '${contact.Email}'
+                    )">
+                        <i class="fa-solid fa-pencil"></i>
+                    </button>
+                    <!-- For deletion, pass only the first name -->
+                    <button onclick="deleteContact('${contact.FirstName}')">
+                        <i class="fa-solid fa-trash"></i>
+                    </button>
                 </td>
             </tr>
         `;
@@ -291,26 +356,33 @@ function displayContacts(contacts) {
     });
 }
 
-// ** Load Contacts on Dashboard Load **
+/***************************************************
+   LOAD ALL CONTACTS (Helper)
+****************************************************/
 function loadContacts() {
+    console.log("Loading contacts...");
     document.getElementById("search-input").value = "";
-    searchContacts(); // Load all contacts
+    searchContacts(); // Just calls search with an empty string
 }
 
-// ** Event Listeners **
+/***************************************************
+   HOOKS FOR SEARCH + ADD
+****************************************************/
 document.querySelector(".search-bar button").addEventListener("click", searchContacts);
+
 document.getElementById("search-input").addEventListener("input", function () {
     if (this.value.trim() === "") {
-        loadContacts(); // Reload all contacts
+        loadContacts(); // reload all contacts if search bar is cleared
     }
 });
+
 document.querySelector(".add-contact button").addEventListener("click", addContact);
 
-
-// Toggle tooltip visibility
+/***************************************************
+   TOOLTIPS
+****************************************************/
 function toggleTooltip(tooltipId) {
     const tooltip = document.getElementById(tooltipId);
-
     if (!tooltip) return; // Ensure tooltip exists
 
     // Close all other tooltips
@@ -324,7 +396,6 @@ function toggleTooltip(tooltipId) {
     tooltip.classList.toggle('active');
 }
 
-// Ensure tooltip buttons exist before adding event listeners
 document.addEventListener("DOMContentLoaded", function () {
     const usernameTooltipBtn = document.getElementById("username-tooltip-btn");
     const passwordTooltipBtn = document.getElementById("password-tooltip-btn");

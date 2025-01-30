@@ -30,7 +30,9 @@
                     </div>
                     <button type="submit">Login</button>
                 </form>
-                <p style="color: white;">Don't have an account? <button class="toggle-btn" onclick="toggleForm('signup')">Sign Up</button></p>
+                <p style="color: white;">Don't have an account? 
+                  <button class="toggle-btn" onclick="toggleForm('signup')">Sign Up</button>
+                </p>
             </div>
 
             <!-- Signup Form -->
@@ -45,39 +47,41 @@
                         <i class="fa-solid fa-user"></i>
                         <input type="text" id="signup-lastname" placeholder="Last Name" required>
                     </div>
-            <!-- Username Input Field -->
-            <div class="input-container">
-                <i class="fa-solid fa-user"></i>
-                <input type="text" id="signup-username" placeholder="Username (3-18 characters)" required>
-                <button type="button" class="tooltip-btn" id="username-tooltip-btn"></button>
-                <div class="tooltip" id="username-tooltip">
-                    Username must:
-                    <ul>
-                        <li>Be 3-18 characters long</li>
-                        <li>Contain at least one letter</li>
-                        <li>Include only letters and numbers</li>
-                    </ul>
-                </div>
-            </div>
-            <!-- Password Input Field -->
-            <div class="input-container">
-                <i class="fa-solid fa-lock"></i>
-                <input id="signup-password" type="password" placeholder="Password (8-32 characters)" required>
-                <button type="button" class="tooltip-btn" id="password-tooltip-btn"></button>
-                <div class="tooltip" id="password-tooltip">
-                    Password must:
-                    <ul>
-                        <li>Be 8-32 characters long</li>
-                        <li>Contain at least one uppercase letter</li>
-                        <li>Contain at least one number</li>
-                        <li>Contain at least one special character (@$!%*?&)</li>
-                    </ul>
-                </div>
-            </div>
+                    <!-- Username Input Field -->
+                    <div class="input-container">
+                        <i class="fa-solid fa-user"></i>
+                        <input type="text" id="signup-username" placeholder="Username (3-18 characters)" required>
+                        <button type="button" class="tooltip-btn" id="username-tooltip-btn"></button>
+                        <div class="tooltip" id="username-tooltip">
+                            Username must:
+                            <ul>
+                                <li>Be 3-18 characters long</li>
+                                <li>Contain at least one letter</li>
+                                <li>Include only letters and numbers</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <!-- Password Input Field -->
+                    <div class="input-container">
+                        <i class="fa-solid fa-lock"></i>
+                        <input id="signup-password" type="password" placeholder="Password (8-32 characters)" required>
+                        <button type="button" class="tooltip-btn" id="password-tooltip-btn"></button>
+                        <div class="tooltip" id="password-tooltip">
+                            Password must:
+                            <ul>
+                                <li>Be 8-32 characters long</li>
+                                <li>Contain at least one uppercase letter</li>
+                                <li>Contain at least one number</li>
+                                <li>Contain at least one special character (@$!%*?&)</li>
+                            </ul>
+                        </div>
+                    </div>
 
                     <button type="submit">Sign Up</button>
                 </form>
-                <p style="color: white;">Already have an account? <button class="toggle-btn" onclick="toggleForm('login')">Login</button></p>
+                <p style="color: white;">Already have an account? 
+                  <button class="toggle-btn" onclick="toggleForm('login')">Login</button>
+                </p>
             </div>
         </div>
 
@@ -102,41 +106,22 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td>John</td>
-                        <td>Doe</td>
-                        <td>123-456-7890</td>
-                        <td>johndoe@example.com</td>
-                        <td>
-                            <button><i class="fa-solid fa-pencil"></i></button>
-                            <button><i class="fa-solid fa-trash"></i></button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>Jane</td>
-                        <td>Smith</td>
-                        <td>987-654-3210</td>
-                        <td>janesmith@example.com</td>
-                        <td>
-                            <button><i class="fa-solid fa-pencil"></i></button>
-                            <button><i class="fa-solid fa-trash"></i></button>
-                        </td>
-                    </tr>
+                    <!-- Dynamically populated by JS -->
                 </tbody>
             </table>
-
+            
             <div class="add-contact">
                 <button>Add New Contact</button>
             </div>
         </div>
     </div>
-<!-- REMOVE LATER: Debug Dashboard Button -->
-<div class="debug-container">
-    <button id="debug-dashboard-button">Debug: Open Dashboard</button>
-</div>
 
+    <!-- REMOVE LATER: Debug Dashboard Button -->
+    <div class="debug-container">
+        <button id="debug-dashboard-button">Debug: Open Dashboard</button>
+    </div>
 
-
+    <!-- Link to your corrected JavaScript -->
     <script src="js/code.js"></script>
 </body>
 </html>

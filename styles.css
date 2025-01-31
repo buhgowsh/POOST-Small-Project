@@ -298,23 +298,3 @@ p {
 .tooltip.active {
     display: block;
 }
-
-/* REMOVE LATER: Debug Button Styling */
-.debug-container {
-    margin-top: 10px;
-    text-align: center;
-}
-
-#debug-dashboard-button {
-    padding: 10px 20px;
-    font-size: 1rem;
-    background: #ff9800; /* Orange color for visibility */
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-}
-
-#debug-dashboard-button:hover {
-    background: #e68900; /* Darker orange on hover */
-}

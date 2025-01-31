@@ -26,15 +26,6 @@ function toggleForm(formType) {
 }
 
 /***************************************************
-   DEBUG BUTTON TO FORCE DASHBOARD (REMOVE LATER)
-****************************************************/
-document.getElementById('debug-dashboard-button')?.addEventListener('click', function () {
-    document.querySelector('.form-container').classList.add('hidden');
-    document.querySelector('.dashboard-container').classList.remove('hidden');
-    loadContacts();
-});
-
-/***************************************************
    LOGIN API
 ****************************************************/
 document.getElementById('login-form').addEventListener('submit', async function (e) {
@@ -66,7 +57,7 @@ document.getElementById('login-form').addEventListener('submit', async function 
             firstName = result.FirstName;
             lastName = result.LastName;
 
-            alert(`Welcome back, ${result.FirstName} ${result.LastName}!`);
+            alert(`Welcome, ${result.FirstName} ${result.LastName}!`);
 
             // Hide login/signup, show dashboard
             document.querySelector('.form-container').classList.add('hidden');
@@ -147,18 +138,22 @@ document.getElementById("logout-button").addEventListener("click", function () {
    ADD CONTACT
 ****************************************************/
 async function addContact() {
-    const fn = document.getElementById("contact-firstname")?.value || "";
-    const ln = document.getElementById("contact-lastname")?.value || "";
-    const ph = document.getElementById("contact-phone")?.value || "";
-    const em = document.getElementById("contact-email")?.value || "";
+    // Prompt the user for contact details:
+    const fn = prompt("Enter first name:");
+    if (!fn) { alert("All fields are required to add a contact."); return; }
 
-    if (!fn || !ln || !ph || !em) {
-        alert("All fields are required to add a contact.");
-        return;
-    }
+    const ln = prompt("Enter last name:");
+    if (!ln) { alert("All fields are required to add a contact."); return; }
 
+    const ph = prompt("Enter phone number:");
+    if (!ph) { alert("All fields are required to add a contact."); return; }
+
+    const em = prompt("Enter email address:");
+    if (!em) { alert("All fields are required to add a contact."); return; }
+
+    // Build payload (notice capital "UserID" to match your AddContact.php)
     let payload = {
-        UserID: userId,     // Must be capital "UserID" to match AddContact.php
+        UserID: userId,
         FirstName: fn,
         LastName: ln,
         Phone: ph,
@@ -174,11 +169,12 @@ async function addContact() {
             headers: { 'Content-Type': 'application/json' },
             body: jsonPayload
         });
-        const result = await response.json();
 
+        const result = await response.json();
         if (response.ok && !result.error) {
             alert("Contact added successfully!");
-            loadContacts(); // Reload contacts
+            // Reload the contacts so the new one shows
+            loadContacts();
         } else {
             alert(result.error || "Failed to add contact.");
         }
@@ -187,6 +183,7 @@ async function addContact() {
         alert("An error occurred while adding the contact.");
     }
 }
+
 
 /***************************************************
    SEARCH CONTACTS
@@ -228,16 +225,20 @@ async function searchContacts() {
    DELETE CONTACT
    (DeleteContact.php expects "FirstName")
 ****************************************************/
-async function deleteContact(firstName) {
-    let confirmDelete = confirm("Are you sure you want to delete all contacts with First Name = " + firstName + "?");
+async function deleteContact(fn, ln, ph, em) {
+    let confirmDelete = confirm(`Are you sure you want to delete ${fn} ${ln}?`);
     if (!confirmDelete) return;
 
+    // The payload must match the 4 fields that DeleteContact.php expects
     let payload = {
-        FirstName: firstName // Must be capital "FirstName" to match DeleteContact.php
+        FirstName: fn,
+        LastName: ln,
+        Phone: ph,
+        Email: em
     };
-    let jsonPayload = JSON.stringify(payload);
 
-    let url = `${urlBase}/DeleteContact.${extension}`;
+    let jsonPayload = JSON.stringify(payload);
+    let url = urlBase + '/DeleteContact.' + extension;
 
     try {
         const response = await fetch(url, {
@@ -245,11 +246,12 @@ async function deleteContact(firstName) {
             headers: { 'Content-Type': 'application/json' },
             body: jsonPayload
         });
+
         const result = await response.json();
 
         if (response.ok && !result.error) {
-            alert(`Contact(s) with first name "${firstName}" deleted successfully!`);
-            loadContacts();
+            alert(`Deleted contact: ${fn} ${ln}`);
+            loadContacts(); // Refresh the contact list
         } else {
             alert(result.error || "Failed to delete contact.");
         }
@@ -325,9 +327,7 @@ function displayContacts(contacts) {
         return;
     }
 
-    // For each contact, create a table row
     contacts.forEach((contact) => {
-        // We'll pass the necessary data to editContact
         const row = `
             <tr>
                 <td>${contact.FirstName}</td>
@@ -335,9 +335,9 @@ function displayContacts(contacts) {
                 <td>${contact.Phone}</td>
                 <td>${contact.Email}</td>
                 <td>
-                    <!-- Pass ID + old field values to editContact -->
+                    <!-- EDIT pencil button (restore this part) -->
                     <button onclick="editContact(
-                        ${contact.ContactID}, 
+                        '${contact.ContactID}', 
                         '${contact.FirstName}', 
                         '${contact.LastName}', 
                         '${contact.Phone}', 
@@ -345,8 +345,14 @@ function displayContacts(contacts) {
                     )">
                         <i class="fa-solid fa-pencil"></i>
                     </button>
-                    <!-- For deletion, pass only the first name -->
-                    <button onclick="deleteContact('${contact.FirstName}')">
+
+                    <!-- DELETE trash icon button -->
+                    <button onclick="deleteContact(
+                        '${contact.FirstName}',
+                        '${contact.LastName}',
+                        '${contact.Phone}',
+                        '${contact.Email}'
+                    )">
                         <i class="fa-solid fa-trash"></i>
                     </button>
                 </td>
@@ -355,6 +361,7 @@ function displayContacts(contacts) {
         tableBody.insertAdjacentHTML("beforeend", row);
     });
 }
+
 
 /***************************************************
    LOAD ALL CONTACTS (Helper)
@@ -365,10 +372,17 @@ function loadContacts() {
     searchContacts(); // Just calls search with an empty string
 }
 
-/***************************************************
-   HOOKS FOR SEARCH + ADD
-****************************************************/
-document.querySelector(".search-bar button").addEventListener("click", searchContacts);
+// Listen for clicks on the "Search" button:
+document.getElementById("search-button").addEventListener("click", searchContacts);
+
+// Listen for clicks on the "Show All" button:
+document.getElementById("show-all-button").addEventListener("click", function() {
+    // 1. Clear out any text in the search bar:
+    document.getElementById("search-input").value = "";
+
+    // 2. Reload all contacts:
+    loadContacts();
+});
 
 document.getElementById("search-input").addEventListener("input", function () {
     if (this.value.trim() === "") {
